@@ -87,6 +87,10 @@ class VideoCapture: NSObject {
     }
 
     private func setUpAVCapture() throws {
+        
+        //Configure the Capture Session [キャプチャセッションを構成する]
+        //The sample starts by getting an image from the device’s built-in camera using an AVCaptureSession (see Setting Up a Capture Session). [サンプルは、AVCaptureSessionを使用してデバイスの内蔵カメラから画像を取得することから始まります（キャプチャセッションの設定を参照）。]
+        
         if captureSession.isRunning {
             captureSession.stopRunning()
         }
@@ -225,6 +229,8 @@ extension VideoCapture: AVCaptureVideoDataOutputSampleBufferDelegate {
         guard let delegate = delegate else { return }
 
         if let pixelBuffer = sampleBuffer.imageBuffer {
+            //Acquire the Captured Image
+            //ビデオキャプチャセッションは、各画像をVideoCaptureクラスのcaptureOutput（_：didOutput：from :)メソッドに送信します。このメソッドでは、アプリが受信したCMSampleBufferをCGImageに変換してから、VideoCaptureオブジェクトに割り当てられたデリゲートに渡します。
             // Attempt to lock the image buffer to gain access to its memory.
             guard CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly) == kCVReturnSuccess
                 else {

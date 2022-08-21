@@ -44,19 +44,46 @@ class ViewController: UIViewController {
         poseNet.delegate = self
         setupAndBeginCapturingVideoFrames()
     }
-
     private func setupAndBeginCapturingVideoFrames() {
-        videoCapture.setUpAVCapture { error in
-            if let error = error {
-                print("Failed to setup camera with error \(error)")
-                return
-            }
+        let asset = AVAsset(url: Bundle.main.url(forResource: "traning", withExtension: "mp4")!)
+        let composition = AVVideoComposition(asset: asset,  applyingCIFiltersWithHandler: { request in
+                print("test")
+                let source = request.sourceImage.clampedToExtent()
 
-            self.videoCapture.delegate = self
 
-            self.videoCapture.startCapturing()
-        }
+                // guard currentFrame == nil else {
+                //     return
+                // }
+                // guard let image = capturedImage else {
+                //     fatalError("Captured image is null")
+                // }
+
+                //currentFrame = image
+                if let cgImage = source.cgImage {
+                    self.poseNet.predict(cgImage)
+                }
+  
+
+                request.finish(with: request.sourceImage, context: nil)
+                
+        })
+        let playerItem = AVPlayerItem(asset: asset)
+        playerItem.videoComposition = composition
+        let player = AVPlayer(playerItem: playerItem)
+        player.play()
     }
+//    private func setupAndBeginCapturingVideoFrames() {
+//        videoCapture.setUpAVCapture { error in
+//            if let error = error {
+//                print("Failed to setup camera with error \(error)")
+//                return
+//            }
+//
+//            self.videoCapture.delegate = self
+//
+//            self.videoCapture.startCapturing()
+//        }
+//    }
 
     override func viewWillDisappear(_ animated: Bool) {
         videoCapture.stopCapturing {

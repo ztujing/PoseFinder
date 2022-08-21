@@ -52,6 +52,12 @@ class PoseImageView: UIImageView {
     ///     - poses: An array of detected poses.
     ///     - frame: The image used to detect the poses and used as the background for the returned image.
     func show(poses: [Pose], on frame: CGImage) {
+        
+        //Visualize the Detected Poses [検出されたポーズを視覚化する]
+        //For each detected pose, the sample app draws a wireframe over the input image, connecting the lines between the joints and then drawing circles for the joints themselves. [サンプルアプリは、検出されたポーズごとに、入力画像上にワイヤーフレームを描画し、関節間の線を接続してから、関節自体の円を描画します。]
+        
+        
+        
         let dstImageSize = CGSize(width: frame.width, height: frame.height)
         let dstImageFormat = UIGraphicsImageRendererFormat()
 
@@ -127,10 +133,10 @@ class PoseImageView: UIImageView {
     ///     - circle: A valid joint whose position is used as the circle's center.
     ///     - cgContext: The rendering context.
     private func draw(circle joint: Joint, in cgContext: CGContext) {
-        cgContext.setFillColor(jointColor.cgColor)
+           cgContext.setFillColor(jointColor.cgColor)
 
-        let rectangle = CGRect(x: joint.position.x - jointRadius, y: joint.position.y - jointRadius,
-                               width: jointRadius * 2, height: jointRadius * 2)
+           let rectangle = CGRect(x: joint.position.x - jointRadius, y: joint.position.y - jointRadius,
+                                  width: jointRadius * 2, height: jointRadius * 2)
         cgContext.addEllipse(in: rectangle)
         cgContext.drawPath(using: .fill)
     }

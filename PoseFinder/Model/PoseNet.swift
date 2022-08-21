@@ -50,14 +50,23 @@ class PoseNet {
     ///     - image: Image passed by the PoseNet model.
     func predict(_ image: CGImage) {
         DispatchQueue.global(qos: .userInitiated).async {
+            
+            //Prepare the Input for the PoseNet Model [PoseNetモデルの入力を準備します]
+            // After receiving the captured image, the app wraps it in an instance of PoseNetInput, a custom feature provider, to resize the image to the specified size. [キャプチャされた画像を受信した後、アプリはそれをカスタム機能プロバイダーであるPoseNetInputのインスタンスにラップして、指定されたサイズに画像のサイズを変更します。]
+            
             // Wrap the image in an instance of PoseNetInput to have it resized
             // before being passed to the PoseNet model.
             let input = PoseNetInput(image: image, size: self.modelInputSize)
 
+            
+            //Pass the Input to the PoseNet Model [入力をPoseNetモデルに渡します]
+            // The sample app then proceeds to pass the input to the PoseNet’s prediction(from:) function to obtain its outputs, which the app uses to detect poses. [次に、サンプルアプリは、入力をPoseNetのprediction（from :)関数に渡して、その出力を取得します。この出力は、アプリがポーズの検出に使用します。]
+            
             guard let prediction = try? self.poseNetMLModel.prediction(from: input) else {
                 return
             }
-
+            //Next, the sample app wraps the PoseNet model outputs in an instance of PoseNetOutput, along with the model’s input size and output stride, before passing it back to the assigned delegate for analysis. [次に、サンプルアプリは、分析のために割り当てられたデリゲートに返す前に、モデルの入力サイズと出力ストライドとともに、PoseNetOutputのインスタンスでPoseNetモデルの出力をラップします。]
+            
             let poseNetOutput = PoseNetOutput(prediction: prediction,
                                               modelInputSize: self.modelInputSize,
                                               modelOutputStride: self.outputStride)

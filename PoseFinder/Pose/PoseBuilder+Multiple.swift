@@ -11,6 +11,10 @@ import CoreGraphics
 extension PoseBuilder {
     /// Returns an array of poses constructed using the outputs from the PoseNet model.
     var poses: [Pose] {
+        
+        //The multiple-person algorithm first identifies a set of candidate root joints as starting points. [複数人アルゴリズムは、最初に候補ルートジョイントのセットを開始点として識別します。] It uses these root joints to find neighboring joints and repeats the process until it has located all 17 joints of each person. [これらのルートジョイントを使用して隣接するジョイントを検索し、各人の17個のジョイントすべてが見つかるまでこのプロセスを繰り返します。] For example, the algorithm may find a left knee with a high confidence, and then search for its adjacent joints, the left ankle and left hip. [たとえば、アルゴリズムは信頼性の高い左膝を見つけてから、隣接する関節である左足首と左股関節を検索する場合があります。]
+        
+        
         var detectedPoses = [Pose]()
 
         // Iterate through the joints with the greatest confidence, referred to here as

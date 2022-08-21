@@ -9,9 +9,16 @@ The implementation of a single-person pose estimation algorithm, based on the Te
 import CoreGraphics
 
 extension PoseBuilder {
+
     /// Returns a pose constructed using the outputs from the PoseNet model.
     var pose: Pose {
+        
+        
+        //Analyze the PoseNet Output to Locate Joints [PoseNet出力を分析して関節を見つけます]
+        //The sample uses one of two algorithms to locate the joints of either one person or multiple persons. [このサンプルでは、​​2つのアルゴリズムのいずれかを使用して、1人または複数の人の関節を特定します。] The single-person algorithm, the simplest and fastest, inspects the model’s outputs to locate the most prominent joints in the image and uses these joints to construct a single pose. [最も単純で最速の一人のアルゴリズムは、モデルの出力を検査して画像内で最も目立つ関節を特定し、これらの関節を使用して単一のポーズを作成します。]
+       
         var pose = Pose()
+        
 
         // For each joint, find its most likely position and associated confidence
         // by querying the heatmap array for the cell with the greatest
