@@ -10,6 +10,12 @@ import AVFoundation
 import UIKit
 import VideoToolbox
 
+extension CIImage {
+    func toCGImage() -> CGImage? {
+        let context = { CIContext(options: nil) }()
+        return context.createCGImage(self, from: self.extent)
+    }
+}
 class ViewController: UIViewController {
     /// The view the controller uses to visualize the detected poses.
     @IBOutlet private var previewImageView: PoseImageView!
@@ -29,48 +35,72 @@ class ViewController: UIViewController {
 
     private var popOverPresentationManager: PopOverPresentationManager?
 
+    private var playerLayer:AVPlayerLayer!
+    private var player:AVPlayer!
+    @IBOutlet weak var playerView: PlayerView!
+
     override func viewDidLoad() {
-        super.viewDidLoad()
+      super.viewDidLoad()
 
-        // For convenience, the idle timer is disabled to prevent the screen from locking.
-        UIApplication.shared.isIdleTimerDisabled = true
+      // For convenience, the idle timer is disabled to prevent the screen from locking.
+      UIApplication.shared.isIdleTimerDisabled = true
 
-        do {
-            poseNet = try PoseNet()
-        } catch {
-            fatalError("Failed to load model. \(error.localizedDescription)")
-        }
+      do {
+        poseNet = try PoseNet()
+      } catch {
+        fatalError("Failed to load model. \(error.localizedDescription)")
+      }
 
-        poseNet.delegate = self
-        setupAndBeginCapturingVideoFrames()
+      poseNet.delegate = self
+      setupAndBeginCapturingVideoFrames()
     }
     private func setupAndBeginCapturingVideoFrames() {
-        let asset = AVAsset(url: Bundle.main.url(forResource: "traning", withExtension: "mp4")!)
-        let composition = AVVideoComposition(asset: asset,  applyingCIFiltersWithHandler: { request in
-                print("test")
-                let source = request.sourceImage.clampedToExtent()
+      let asset = AVAsset(url: Bundle.main.url(forResource: "traning", withExtension: "mp4")!)
+      let composition = AVVideoComposition(asset: asset, applyingCIFiltersWithHandler: { request in
+//          print("test")
+//          let source = request.sourceImage.clampedToExtent()
+          let source = request.sourceImage
 
 
-                // guard currentFrame == nil else {
-                //     return
-                // }
-                // guard let image = capturedImage else {
-                //     fatalError("Captured image is null")
-                // }
+          // guard currentFrame == nil else {
+          //   return
+          // }
+          // guard let image = capturedImage else {
+          //   fatalError("Captured image is null")
+          // }
 
-                //currentFrame = image
-                if let cgImage = source.cgImage {
-                    self.poseNet.predict(cgImage)
-                }
-  
+          
+//          print(source)
+//          print(source.toCGImage())
 
-                request.finish(with: request.sourceImage, context: nil)
-                
-        })
-        let playerItem = AVPlayerItem(asset: asset)
-        playerItem.videoComposition = composition
-        let player = AVPlayer(playerItem: playerItem)
-        player.play()
+          //コマ落ちしても良い
+          if let cgImage = source.toCGImage() {
+              self.currentFrame = cgImage
+              self.poseNet.predict(cgImage)
+          }
+
+
+
+          request.finish(with: request.sourceImage, context: nil)
+
+      })
+      let playerItem = AVPlayerItem(asset: asset)
+      playerItem.videoComposition = composition
+
+      self.player = AVPlayer(playerItem: playerItem)
+
+      self.playerLayer = AVPlayerLayer(player: player)
+      // 表示モードの設定
+      playerLayer.videoGravity = AVLayerVideoGravity.resizeAspect
+      playerLayer.contentsScale = UIScreen.main.scale
+
+      self.playerView.playerLayer = self.playerLayer
+      self.playerView.layer.insertSublayer(playerLayer, at: 0)
+
+      self.player.play()
+
+
+
     }
 //    private func setupAndBeginCapturingVideoFrames() {
 //        videoCapture.setUpAVCapture { error in
@@ -176,19 +206,21 @@ extension ViewController: PoseNetDelegate {
             // Release `currentFrame` when exiting this method.
             self.currentFrame = nil
         }
-
+        
         guard let currentFrame = currentFrame else {
             return
         }
-
+        
         let poseBuilder = PoseBuilder(output: predictions,
                                       configuration: poseBuilderConfiguration,
                                       inputImage: currentFrame)
+        print(poseBuilder)
 
         let poses = algorithm == .single
             ? [poseBuilder.pose]
             : poseBuilder.poses
-
+        print(poses)
+//座標データ？
         previewImageView.show(poses: poses, on: currentFrame)
     }
 }

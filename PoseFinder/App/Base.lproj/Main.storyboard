@@ -21,8 +21,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ArZ-44-lD1" customClass="PoseImageView" customModule="PoseFinder" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jv9-J0-ouk" customClass="PlayerView" customModule="PoseFinder" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="44" width="375" height="734"/>
+                            </view>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ArZ-44-lD1" customClass="PoseImageView" customModule="PoseFinder" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="segmentLineWidth">
                                         <real key="value" value="3"/>
@@ -78,7 +82,7 @@
                                     <action selector="onCameraButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="5dj-RN-msI"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c4t-1N-oJy">
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c4t-1N-oJy">
                                 <rect key="frame" x="112.66666666666669" y="730" width="150" height="33"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
                                 <state key="normal" title="Open Configuration">
@@ -91,25 +95,25 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="ArZ-44-lD1" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" id="2Jo-v1-F6T"/>
+                            <constraint firstItem="jv9-J0-ouk" firstAttribute="top" secondItem="F1z-cx-652" secondAttribute="bottom" id="4RC-RI-TVF"/>
                             <constraint firstItem="8o7-cd-AQr" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="5kX-v9-7Op"/>
                             <constraint firstAttribute="trailing" secondItem="kFx-2J-Bjc" secondAttribute="trailing" id="6gk-Va-ZsI"/>
                             <constraint firstAttribute="trailing" secondItem="8o7-cd-AQr" secondAttribute="trailing" id="8SQ-dt-aql"/>
                             <constraint firstAttribute="bottom" secondItem="8o7-cd-AQr" secondAttribute="bottom" id="AJN-eH-I4s"/>
-                            <constraint firstItem="c4t-1N-oJy" firstAttribute="centerX" secondItem="ArZ-44-lD1" secondAttribute="centerX" id="GhP-pt-YXU"/>
-                            <constraint firstItem="ArZ-44-lD1" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="IQo-uE-KGM"/>
-                            <constraint firstAttribute="trailing" secondItem="ArZ-44-lD1" secondAttribute="trailing" id="Ofr-gP-hut"/>
+                            <constraint firstAttribute="trailing" secondItem="jv9-J0-ouk" secondAttribute="trailing" id="Cjd-z3-UJ4"/>
+                            <constraint firstItem="jv9-J0-ouk" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="MX4-yC-oeS"/>
                             <constraint firstItem="8o7-cd-AQr" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.15" id="OoF-eO-91Y"/>
                             <constraint firstItem="BtZ-RJ-x8n" firstAttribute="top" secondItem="F1z-cx-652" secondAttribute="bottom" constant="12" id="ZA4-Ra-Xz4"/>
                             <constraint firstItem="zt5-5N-S1k" firstAttribute="top" secondItem="c4t-1N-oJy" secondAttribute="bottom" constant="15" id="abu-9f-Cu8"/>
                             <constraint firstItem="kFx-2J-Bjc" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="j3v-ZB-E8C"/>
                             <constraint firstAttribute="trailing" secondItem="BtZ-RJ-x8n" secondAttribute="trailing" constant="30" id="jr2-4Z-W6H"/>
                             <constraint firstItem="kFx-2J-Bjc" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="pa9-pH-L3g"/>
+                            <constraint firstItem="zt5-5N-S1k" firstAttribute="top" secondItem="jv9-J0-ouk" secondAttribute="bottom" id="s6s-gF-qaN"/>
                             <constraint firstItem="kFx-2J-Bjc" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.15" id="tC8-fY-fZp"/>
-                            <constraint firstItem="ArZ-44-lD1" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="ykF-C2-0P9"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="playerView" destination="jv9-J0-ouk" id="PMu-3E-rGy"/>
                         <outlet property="previewImageView" destination="ArZ-44-lD1" id="nT5-Yu-T3h"/>
                     </connections>
                 </viewController>

@@ -67,18 +67,19 @@ class PoseImageView: UIImageView {
 
         let dstImage = renderer.image { rendererContext in
             // Draw the current frame as the background for the new image.
-            draw(image: frame, in: rendererContext.cgContext)
+//            draw(image: frame, in: rendererContext.cgContext)
 
             for pose in poses {
                 // Draw the segment lines.
                 for segment in PoseImageView.jointSegments {
                     let jointA = pose[segment.jointA]
                     let jointB = pose[segment.jointB]
-
+                    //
                     guard jointA.isValid, jointB.isValid else {
                         continue
                     }
-
+                    print(jointA,jointB)
+                    
                     drawLine(from: jointA,
                              to: jointB,
                              in: rendererContext.cgContext)
@@ -92,6 +93,7 @@ class PoseImageView: UIImageView {
         }
 
         image = dstImage
+        print(image)
     }
 
     /// Vertically flips and draws the given image.
@@ -121,7 +123,7 @@ class PoseImageView: UIImageView {
                   in cgContext: CGContext) {
         cgContext.setStrokeColor(segmentColor.cgColor)
         cgContext.setLineWidth(segmentLineWidth)
-
+        print(parentJoint.position)
         cgContext.move(to: parentJoint.position)
         cgContext.addLine(to: childJoint.position)
         cgContext.strokePath()

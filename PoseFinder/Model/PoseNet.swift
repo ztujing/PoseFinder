@@ -66,7 +66,7 @@ class PoseNet {
                 return
             }
             //Next, the sample app wraps the PoseNet model outputs in an instance of PoseNetOutput, along with the model’s input size and output stride, before passing it back to the assigned delegate for analysis. [次に、サンプルアプリは、分析のために割り当てられたデリゲートに返す前に、モデルの入力サイズと出力ストライドとともに、PoseNetOutputのインスタンスでPoseNetモデルの出力をラップします。]
-            
+//            print(prediction)
             let poseNetOutput = PoseNetOutput(prediction: prediction,
                                               modelInputSize: self.modelInputSize,
                                               modelOutputStride: self.outputStride)
