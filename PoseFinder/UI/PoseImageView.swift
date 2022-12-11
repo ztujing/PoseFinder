@@ -67,7 +67,7 @@ class PoseImageView: UIImageView {
 
         let dstImage = renderer.image { rendererContext in
             // Draw the current frame as the background for the new image.
-//            draw(image: frame, in: rendererContext.cgContext)
+            draw(image: frame, in: rendererContext.cgContext)
 
             for pose in poses {
                 // Draw the segment lines.
@@ -108,6 +108,7 @@ class PoseImageView: UIImageView {
         cgContext.scaleBy(x: 1.0, y: -1.0)
         // Render the image, adjusting for the scale transformation performed above.
         let drawingRect = CGRect(x: 0, y: -image.height, width: image.width, height: image.height)
+        print(drawingRect)
         cgContext.draw(image, in: drawingRect)
         cgContext.restoreGState()
     }
