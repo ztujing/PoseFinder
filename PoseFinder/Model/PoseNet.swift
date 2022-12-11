@@ -16,7 +16,7 @@ protocol PoseNetDelegate: AnyObject {
 class PoseNet {
     /// The delegate to receive the PoseNet model's outputs.
     weak var delegate: PoseNetDelegate?
-
+    var type = ""
     /// The PoseNet model's input size.
     ///
     /// All PoseNet models available from the Model Gallery support the input sizes 257x257, 353x353, and 513x513.
@@ -39,7 +39,8 @@ class PoseNet {
     /// - Note: Other variants of the PoseNet model are available from the Model Gallery.
     private let poseNetMLModel: MLModel
 
-    init() throws {
+    init(type:String) throws {
+        self.type = type
         poseNetMLModel = try PoseNetMobileNet075S16FP16(configuration: .init()).model
     }
 

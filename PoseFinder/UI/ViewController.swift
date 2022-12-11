@@ -18,15 +18,18 @@ extension CIImage {
 }
 class ViewController: UIViewController {
     /// The view the controller uses to visualize the detected poses.
-    @IBOutlet private var previewImageView: PoseImageView!
+    @IBOutlet private var videoPreviewImageView: PoseImageView!
+    @IBOutlet private var moviePreviewImageView: PoseImageView!
 
     private let videoCapture = VideoCapture()
 
-    private var poseNet: PoseNet!
+    private var videoPoseNet: PoseNet!
+    private var moviePoseNet: PoseNet!
 
     /// The frame the PoseNet model is currently making pose predictions from.
-    private var currentFrame: CGImage?
-
+    private var videoCurrentFrame: CGImage?
+    private var movieCurrentFrame: CGImage?
+    
     /// The algorithm the controller uses to extract poses from the current frame.
     private var algorithm: Algorithm = .multiple
 
@@ -46,42 +49,37 @@ class ViewController: UIViewController {
       UIApplication.shared.isIdleTimerDisabled = true
 
       do {
-        poseNet = try PoseNet()
+          videoPoseNet = try PoseNet(type: "video")
+          moviePoseNet = try PoseNet(type: "movie")
+
       } catch {
         fatalError("Failed to load model. \(error.localizedDescription)")
       }
 
-      poseNet.delegate = self
+      videoPoseNet.delegate = self
+      moviePoseNet.delegate = self
+        
       setupAndBeginCapturingVideoFrames()
+      setupAndBeginCapturingMovieFrames()
     }
-    private func setupAndBeginCapturingVideoFrames() {
+    private func setupAndBeginCapturingMovieFrames() {
       let asset = AVAsset(url: Bundle.main.url(forResource: "traning", withExtension: "mp4")!)
       let composition = AVVideoComposition(asset: asset, applyingCIFiltersWithHandler: { request in
 //          print("test")
 //          let source = request.sourceImage.clampedToExtent()
+          defer {
+              request.finish(with: request.sourceImage, context: nil)
+          }
+                  
+          guard self.movieCurrentFrame == nil else {
+              return
+          }
           let source = request.sourceImage
-
-
-          // guard currentFrame == nil else {
-          //   return
-          // }
-          // guard let image = capturedImage else {
-          //   fatalError("Captured image is null")
-          // }
-
-          
-//          print(source)
-//          print(source.toCGImage())
-
           //コマ落ちしても良い
           if let cgImage = source.toCGImage() {
-              self.currentFrame = cgImage
-              self.poseNet.predict(cgImage)
+              self.movieCurrentFrame = cgImage
+              self.moviePoseNet.predict(cgImage)
           }
-
-
-
-          request.finish(with: request.sourceImage, context: nil)
 
       })
       let playerItem = AVPlayerItem(asset: asset)
@@ -102,18 +100,18 @@ class ViewController: UIViewController {
 
 
     }
-//    private func setupAndBeginCapturingVideoFrames() {
-//        videoCapture.setUpAVCapture { error in
-//            if let error = error {
-//                print("Failed to setup camera with error \(error)")
-//                return
-//            }
-//
-//            self.videoCapture.delegate = self
-//
-//            self.videoCapture.startCapturing()
-//        }
-//    }
+    private func setupAndBeginCapturingVideoFrames() {
+        videoCapture.setUpAVCapture { error in
+            if let error = error {
+                print("Failed to setup camera with error \(error)")
+                return
+            }
+
+            self.videoCapture.delegate = self
+
+            self.videoCapture.startCapturing()
+        }
+    }
 
     override func viewWillDisappear(_ animated: Bool) {
         videoCapture.stopCapturing {
@@ -186,15 +184,15 @@ extension ViewController: ConfigurationViewControllerDelegate {
 
 extension ViewController: VideoCaptureDelegate {
     func videoCapture(_ videoCapture: VideoCapture, didCaptureFrame capturedImage: CGImage?) {
-        guard currentFrame == nil else {
+        guard videoCurrentFrame == nil else {
             return
         }
         guard let image = capturedImage else {
             fatalError("Captured image is null")
         }
 
-        currentFrame = image
-        poseNet.predict(image)
+        videoCurrentFrame = image
+        videoPoseNet.predict(image)
     }
 }
 
@@ -202,25 +200,54 @@ extension ViewController: VideoCaptureDelegate {
 
 extension ViewController: PoseNetDelegate {
     func poseNet(_ poseNet: PoseNet, didPredict predictions: PoseNetOutput) {
-        defer {
-            // Release `currentFrame` when exiting this method.
-            self.currentFrame = nil
-        }
-        
-        guard let currentFrame = currentFrame else {
-            return
-        }
-        
-        let poseBuilder = PoseBuilder(output: predictions,
-                                      configuration: poseBuilderConfiguration,
-                                      inputImage: currentFrame)
-        print(poseBuilder)
+        if (poseNet.type == "video"){
+            
+            defer {
+                // Release `currentFrame` when exiting this method.
+                self.videoCurrentFrame = nil
+            }
+            
+            guard let currentFrame = videoCurrentFrame else {
+                return
+            }
+            
+            let poseBuilder = PoseBuilder(output: predictions,
+                                          configuration: poseBuilderConfiguration,
+                                          inputImage: currentFrame)
 
-        let poses = algorithm == .single
-            ? [poseBuilder.pose]
-            : poseBuilder.poses
-        print(poses)
-//座標データ？
-        previewImageView.show(poses: poses, on: currentFrame)
+
+            let poses = algorithm == .single
+                ? [poseBuilder.pose]
+                : poseBuilder.poses
+
+    //座標データ？
+            videoPreviewImageView.show(poses: poses, on: currentFrame)
+            
+        }else{
+            
+            defer {
+                // Release `currentFrame` when exiting this method.
+                self.movieCurrentFrame = nil
+            }
+            
+            guard let currentFrame = movieCurrentFrame else {
+                return
+            }
+            
+            let poseBuilder = PoseBuilder(output: predictions,
+                                          configuration: poseBuilderConfiguration,
+                                          inputImage: currentFrame)
+
+
+            let poses = algorithm == .single
+                ? [poseBuilder.pose]
+                : poseBuilder.poses
+
+    //座標データ？
+            moviePreviewImageView.show(poses: poses, on: currentFrame)
+            
+        }
+        
     }
 }
+

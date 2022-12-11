@@ -24,7 +24,10 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jv9-J0-ouk" customClass="PlayerView" customModule="PoseFinder" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="44" width="375" height="734"/>
                             </view>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ArZ-44-lD1" customClass="PoseImageView" customModule="PoseFinder" customModuleProvider="target">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="r2S-OD-28h" customClass="PoseImageView" customModule="PoseFinder" customModuleProvider="target">
+                                <rect key="frame" x="16" y="44" width="343" height="734"/>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ArZ-44-lD1" customClass="PoseImageView" customModule="PoseFinder" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <userDefinedRuntimeAttributes>
@@ -95,26 +98,31 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="r2S-OD-28h" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="2Bo-Iw-sNj"/>
                             <constraint firstItem="jv9-J0-ouk" firstAttribute="top" secondItem="F1z-cx-652" secondAttribute="bottom" id="4RC-RI-TVF"/>
                             <constraint firstItem="8o7-cd-AQr" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="5kX-v9-7Op"/>
                             <constraint firstAttribute="trailing" secondItem="kFx-2J-Bjc" secondAttribute="trailing" id="6gk-Va-ZsI"/>
                             <constraint firstAttribute="trailing" secondItem="8o7-cd-AQr" secondAttribute="trailing" id="8SQ-dt-aql"/>
                             <constraint firstAttribute="bottom" secondItem="8o7-cd-AQr" secondAttribute="bottom" id="AJN-eH-I4s"/>
                             <constraint firstAttribute="trailing" secondItem="jv9-J0-ouk" secondAttribute="trailing" id="Cjd-z3-UJ4"/>
+                            <constraint firstItem="r2S-OD-28h" firstAttribute="top" secondItem="F1z-cx-652" secondAttribute="bottom" id="HBD-fZ-fS2"/>
                             <constraint firstItem="jv9-J0-ouk" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="MX4-yC-oeS"/>
                             <constraint firstItem="8o7-cd-AQr" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.15" id="OoF-eO-91Y"/>
+                            <constraint firstItem="zt5-5N-S1k" firstAttribute="top" secondItem="r2S-OD-28h" secondAttribute="bottom" id="QFX-iO-TKc"/>
                             <constraint firstItem="BtZ-RJ-x8n" firstAttribute="top" secondItem="F1z-cx-652" secondAttribute="bottom" constant="12" id="ZA4-Ra-Xz4"/>
                             <constraint firstItem="zt5-5N-S1k" firstAttribute="top" secondItem="c4t-1N-oJy" secondAttribute="bottom" constant="15" id="abu-9f-Cu8"/>
                             <constraint firstItem="kFx-2J-Bjc" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="j3v-ZB-E8C"/>
                             <constraint firstAttribute="trailing" secondItem="BtZ-RJ-x8n" secondAttribute="trailing" constant="30" id="jr2-4Z-W6H"/>
                             <constraint firstItem="kFx-2J-Bjc" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="pa9-pH-L3g"/>
+                            <constraint firstItem="r2S-OD-28h" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="rXj-VB-lKT"/>
                             <constraint firstItem="zt5-5N-S1k" firstAttribute="top" secondItem="jv9-J0-ouk" secondAttribute="bottom" id="s6s-gF-qaN"/>
                             <constraint firstItem="kFx-2J-Bjc" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.15" id="tC8-fY-fZp"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="moviePreviewImageView" destination="r2S-OD-28h" id="1TX-aL-THe"/>
                         <outlet property="playerView" destination="jv9-J0-ouk" id="PMu-3E-rGy"/>
-                        <outlet property="previewImageView" destination="ArZ-44-lD1" id="nT5-Yu-T3h"/>
+                        <outlet property="videoPreviewImageView" destination="ArZ-44-lD1" id="iDG-Wn-avU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
